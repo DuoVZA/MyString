@@ -236,5 +236,3 @@ MyString MyString::operator++(int)
 	length = temp.length;
 	return temp;
 }
-
-

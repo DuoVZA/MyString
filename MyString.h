@@ -19,6 +19,13 @@ public:
 	int MyStrLen();// возвращает длину строки
 	void MyStrCat(MyString& b); // объединение строк
 	void MyDelChr(char c); // удаляет указанный символ 
-	int MyStrCmp(MyString& b); // сравнение строк 
+	int MyStrCmp(MyString& b); // сравнение строк
+	MyString operator +(MyString& obj);
+	MyString operator +(const char* st);
+	MyString operator +(char c);
+	MyString operator -(MyString& obj);
+	MyString operator -(const char* st);
+	MyString operator -(char c);
+	MyString operator++(int); // postfix
 };
 

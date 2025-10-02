@@ -1,11 +1,13 @@
 #include "MyString.h"
+#include <cstring>
 #include <iostream>
 using namespace std;
 
 MyString::MyString()
 {
 	length = 80;
-	str = new char[length];
+	str = new char[length+1];
+	str[0] = '\0';
 }
 
 MyString::MyString(int size)
@@ -47,7 +49,12 @@ void MyString::Print()
 
 void MyString::Input()
 {
-	cin.getline(str, length+1);
+	char buff[1024];
+	cin.getline(buff, 1024);
+	if (str!=nullptr) {delete[] str;}
+	length = strlen(buff);
+	str = new char[length + 1];
+	strcpy_s(str, length + 1, buff);
 }
 
 void MyString::MyStrcpy(MyString& obj)
@@ -87,7 +94,7 @@ int MyString::MyStrLen()
 void MyString::MyStrCat(MyString& b)
 {
 	int newLength = length + b.length;
-	char* newStr = new char[newLength];
+	char* newStr = new char[newLength+1];
 
 	for (size_t i = 0; i < length; i++)
 	{
@@ -97,6 +104,7 @@ void MyString::MyStrCat(MyString& b)
 	{
 		newStr[length+i] = b.str[i];
 	}
+	newStr[newLength] = '\0';
 	delete[] str;
 	str = newStr;
 	length = newLength;
@@ -138,3 +146,95 @@ int MyString::MyStrCmp(MyString& b)
 	}
 	return length - b.length;
 }
+
+MyString MyString::operator+(MyString& obj)
+{
+	MyString temp;
+	temp.length = this->length + obj.length;
+	temp.str = new char[temp.length + 1];
+	strcpy_s(temp.str, temp.length + 1, this->str);
+	strcat_s(temp.str, temp.length + 1, obj.str);
+	return temp;
+}
+
+MyString MyString::operator+(const char* st)
+{
+	MyString temp;
+	temp.length = this->length + strlen(st);
+	temp.str = new char[temp.length + 1];
+	strcpy_s(temp.str, temp.length + 1, this->str);
+	strcat_s(temp.str, temp.length + 1, st);
+	return temp;
+}
+
+MyString MyString::operator+(char c)
+{
+	MyString temp;
+	temp.length = this->length + 1;
+	temp.str = new char[temp.length + 1];
+	strcpy_s(temp.str, temp.length + 1, this->str);
+	temp.str[this->length] = c;
+	temp.str[temp.length] = '\0';
+	return temp;
+}
+
+MyString MyString::operator-(MyString& obj)
+{
+	const char* pos = strstr(this->str, obj.str);
+	if (!pos) return MyString(*this);
+	MyString temp;
+	temp.length = this->length - obj.length;
+	temp.str = new char[temp.length + 1];
+	int prefixLen = pos - this->str;
+	strcpy_s(temp.str, prefixLen, this->str);
+	temp.str[prefixLen] = '\0';
+	strcat_s(temp.str, prefixLen, pos + obj.length);
+	return temp;
+}
+
+MyString MyString::operator-(const char* st)
+{
+	const char* pos = strstr(this->str, st);
+	if (!pos) return MyString(*this);
+	MyString temp;
+	temp.length = this->length - strlen(st);
+	temp.str = new char[temp.length + 1];
+	size_t prefixLen = pos - this->str;
+	strncpy_s(temp.str, temp.length + 1, this->str, prefixLen);
+	temp.str[prefixLen] = '\0';
+	strcat_s(temp.str, temp.length + 1, pos + strlen(st));
+	return temp;
+}
+
+MyString MyString::operator-(char c)
+{
+	MyString temp;
+	temp.length = this->length;
+	temp.str = new char[temp.length + 1];
+	int idx = 0;
+	for (int i = 0; i < this->length; i++) 
+	{
+		if (this->str[i] != c) 
+		{
+			temp.str[idx++] = this->str[i];
+		}
+	}
+	temp.str[idx] = '\0';
+	temp.length = strlen(temp.str);
+	return temp;
+}
+
+MyString MyString::operator++(int)
+{
+	MyString temp;
+	temp.length = this->length + 1;
+	temp.str = new char[temp.length + 1];
+	strcpy_s(temp.str, temp.length + 1, str);
+	temp.str[temp.length + 1] += ' ';
+	delete[] str;
+	str = temp.str;
+	length = temp.length;
+	return temp;
+}
+
+

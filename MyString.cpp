@@ -13,7 +13,7 @@ MyString::MyString()
 MyString::MyString(int size)
 {
 	length = size;
-	str = new char[length];
+	str = new char[length+1];
 }
 
 MyString::MyString(const char* s)
@@ -49,8 +49,8 @@ void MyString::Print()
 
 void MyString::Input()
 {
-	char buff[1024];
-	cin.getline(buff, 1024);
+	char buff[80];
+	cin.getline(buff, length);
 	if (str!=nullptr) {delete[] str;}
 	length = strlen(buff);
 	str = new char[length + 1];
@@ -186,9 +186,9 @@ MyString MyString::operator-(MyString& obj)
 	temp.length = this->length - obj.length;
 	temp.str = new char[temp.length + 1];
 	int prefixLen = pos - this->str;
-	strcpy_s(temp.str, prefixLen, this->str);
+	strncpy_s(temp.str, temp.length + 1, this->str, prefixLen);
 	temp.str[prefixLen] = '\0';
-	strcat_s(temp.str, prefixLen, pos + obj.length);
+	strcat_s(temp.str, temp.length + 1, pos + obj.length);
 	return temp;
 }
 

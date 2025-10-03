@@ -3,6 +3,7 @@ class MyString
 {
 	char* str;
 	int length;
+	static int count;
 public:
 	MyString();
 	MyString(int size);

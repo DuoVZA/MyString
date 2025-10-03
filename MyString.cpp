@@ -21,6 +21,7 @@ MyString::MyString(const char* s)
 	length = strlen(s);
 	str = new char[length + 1];
 	strcpy_s(str, length + 1, s);
+	count++;
 }
 
 MyString::~MyString()
@@ -32,6 +33,7 @@ MyString::MyString(const MyString& obj):length(obj.length)
 {
 	str = new char[length+1];
 	strcpy_s(str, length + 1, obj.str);
+	count++;
 }
 
 MyString::MyString(MyString&& obj)
@@ -62,6 +64,7 @@ void MyString::MyStrcpy(MyString& obj)
 	length = obj.length;
 	str = new char[length + 1];
 	strcpy_s(str, length + 1, obj.str);
+	count++;
 }
 
 bool MyString::MyStrStr(const char* st)
@@ -108,6 +111,7 @@ void MyString::MyStrCat(MyString& b)
 	delete[] str;
 	str = newStr;
 	length = newLength;
+	count++;
 }
 
 void MyString::MyDelChr(char c)
